@@ -52,7 +52,7 @@ gglite <- function(...){
 
 ## main geoms
 
-line <- function(x, y=NULL, ...) {
+line <- function(x, y=NULL, colour=NULL, ...) {
   args <- list(...)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_line
@@ -60,7 +60,7 @@ line <- function(x, y=NULL, ...) {
   make_geom(df,geom_type,aes,args)
 }
 
-point <- function(x, y=NULL, ...) {
+point <- function(x, y=NULL, colour=NULL, ...) {
   args <- list(...)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_point
@@ -70,7 +70,7 @@ point <- function(x, y=NULL, ...) {
 
 ## 2d geoms
 
-smooth <- function(x, y=NULL, ...) {
+smooth <- function(x, y=NULL, colour=NULL, ...) {
   args <- list(...)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_smooth
@@ -78,7 +78,7 @@ smooth <- function(x, y=NULL, ...) {
   make_geom(df,geom_type,aes,args)
 }
 
-step <- function(x, y=NULL, ...) {
+step <- function(x, y=NULL, colour=NULL, ...) {
   args <- list(...)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_step
@@ -86,7 +86,7 @@ step <- function(x, y=NULL, ...) {
   make_geom(df,geom_type,aes,args)
 }
 
-jitter <- function(x, y=NULL, ...) {
+jitter <- function(x, y=NULL, colour=NULL, ...) {
   args <- list(...)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_jitter    
@@ -96,7 +96,7 @@ jitter <- function(x, y=NULL, ...) {
 
 
 ## 1d geoms
-histogram <- function(y, ...) {
+histogram <- function(y, colour=NULL, ...) {
   args <- list(...)
   df <- make_df(y)
   geom_type <- ggplot2::geom_histogram
@@ -106,7 +106,7 @@ histogram <- function(y, ...) {
   make_geom(df,geom_type,aes,args)
 }
 
-density <- function(y, ...) {
+density <- function(y, colour=NULL, ...) {
   args <- list(...)
   df <- make_df(y)
   geom_type <- ggplot2::geom_density
@@ -115,7 +115,7 @@ density <- function(y, ...) {
   make_geom(df,geom_type,aes,args)
 }
 
-qq <- function(y, ...) {
+qq <- function(y, colour=NULL, ...) {
   args <- list(...)
   df <- data.frame(y)
   geom_type <- ggplot2::geom_qq
@@ -123,7 +123,7 @@ qq <- function(y, ...) {
   make_geom(df,geom_type,aes,args)
 }
 
-qq_line <- function(y, ...) {
+qq_line <- function(y, colour=NULL, ...) {
   args <- list(...)
   df <- data.frame(y)
   geom_type <- ggplot2::geom_qq_line
@@ -133,7 +133,7 @@ qq_line <- function(y, ...) {
 
 ## compare geoms
 
-col <- function(x, y=NULL, ...) {
+col <- function(x, y=NULL, colour=NULL, ...) {
   args <- list(...)
   df <- make_df(x, y)
   df$x <- as.factor(df$x)
@@ -143,7 +143,7 @@ col <- function(x, y=NULL, ...) {
   make_geom(df,geom_type,aes,args)
 }
 
-boxplot <- function(x, y=NULL, ...) {
+boxplot <- function(x, y=NULL, colour=NULL, ...) {
   args <- list(...)
   if (is.null(y)) {
     y=x
@@ -155,7 +155,7 @@ boxplot <- function(x, y=NULL, ...) {
   make_geom(df,geom_type,aes,args)
 }
 
-violin <- function(x, y=NULL, ...) {
+violin <- function(x, y=NULL, colour=NULL, ...) {
   args <- list(...)
   if (is.null(y)) {
     y=x
