@@ -18,17 +18,16 @@ make_df <- function(x, y = NULL) {
       dfx <- data.frame(x)
       dfy <- data.frame(y)
       df <- cbind(dfx,dfy)
-      df <- tidyr::pivot_longer(df, cols = colnames(dfy), names_to = "label", values_to = "y")
+      df <- tidyr::pivot_longer(df, cols = colnames(dfy), names_to = "hue", values_to = "y")
   } else {
       df <- data.frame(x=x,y=y)
   }
   return(df)
 }
 
-make_args <- function(label, args) {
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour", "fill"))) {
-    args[names(args) %in% c("col", "color", "colour", "fill")] <- NULL
-    warning("When the label option is used, the 'color' (or 'colour' or 'col') and 'fill' option will be ignored.")
+validate_args <- function(hue, args) {
+  if (!is.null(hue) && any(names(args) %in% c("col", "color", "colour", "fill"))){
+    stop("(hue, colour/color/col) or (hue, fill) combinations are not allowed.")
   }
   return(args)
 }
@@ -53,119 +52,118 @@ gglite <- function(...){
 
 ## main geoms
 
-line <- function(x, y = NULL, label = NULL, ...) {
-  args_bck <- list(...)
-  args <- make_args(label,list(...))
+line <- function(x, y=NULL, hue=NULL, ...) {
+  args <- list(...); validate_args(hue,args)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_line
-  aes <- ggplot2::aes(x = x, y = y, col = label)
+  aes <- ggplot2::aes(x = x, y = y, col = hue)
   make_geom(df,geom_type,aes,args)+scale_color_manual(values = args_bck$col)
 }
 
-point <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
+point <- function(x, y=NULL, hue=NULL, ...) {
+  args <- list(...); validate_args(hue,args)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_point
-  aes <- ggplot2::aes(x = x, y = y, col = label)
+  aes <- ggplot2::aes(x = x, y = y, col = hue)
   make_geom(df,geom_type,aes,args)
 }
 
 ## 2d geoms
 
-smooth <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
+smooth <- function(x, y=NULL,hue=NULL, ...) {
+  args <- list(...); validate_args(hue,args)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_smooth
-  aes <- ggplot2::aes(x = x, y = y, col = label)
+  aes <- ggplot2::aes(x = x, y = y, col = hue)
   make_geom(df,geom_type,aes,args)
 }
 
-step <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
+step <- function(x, y=NULL,hue=NULL, ...) {
+  args <- list(...); validate_args(hue,args)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_step
-  aes <- ggplot2::aes(x = x, y = y, col = label)
+  aes <- ggplot2::aes(x = x, y = y, col = hue)
   make_geom(df,geom_type,aes,args)
 }
 
-jitter <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
+jitter <- function(x, y=NULL,hue=NULL, ...) {
+  args <- list(...); validate_args(hue,args)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_jitter    
-  aes <- ggplot2::aes(x = x, y = y, col = label)
+  aes <- ggplot2::aes(x = x, y = y, col = hue)
   make_geom(df,geom_type,aes,args)
 }
 
 
 ## 1d geoms
-histogram <- function(y,label=NULL, ...) {
-  args <- make_args(label,list(...))
+histogram <- function(y,hue=NULL, ...) {
+  args <- list(...); validate_args(hue,args)
   df <- make_df(y)
   geom_type <- ggplot2::geom_histogram
-  aes <- ggplot2::aes(x = y, y = stat(density), fill = label)
+  aes <- ggplot2::aes(x = y, y = stat(density), fill = hue)
   args$alpha <- 0.5
   args$position <- "identity"
   make_geom(df,geom_type,aes,args)
 }
 
-density <- function(y,label=NULL, ...) {
-  args <- make_args(label,list(...))
+density <- function(y,hue=NULL, ...) {
+  args <- list(...); validate_args(hue,args)
   df <- make_df(y)
   geom_type <- ggplot2::geom_density
-  aes <- ggplot2::aes(x = y, fill = label, col = label)
+  aes <- ggplot2::aes(x = y, fill = hue, col = hue)
   args$alpha <- 0.25
   make_geom(df,geom_type,aes,args)
 }
 
-qq <- function(y,label=NULL, ...) {
-  args <- make_args(label,list(...))
+qq <- function(y,hue=NULL, ...) {
+  args <- list(...); validate_args(hue,args)
   df <- data.frame(y)
   geom_type <- ggplot2::geom_qq
-  aes <- ggplot2::aes(sample = y, col = label)
+  aes <- ggplot2::aes(sample = y, col = hue)
   make_geom(df,geom_type,aes,args)
 }
 
-qq_line <- function(y,label=NULL, ...) {
-  args <- make_args(label,list(...))
+qq_line <- function(y,hue=NULL, ...) {
+  args <- list(...); validate_args(hue,args)
   df <- data.frame(y)
   geom_type <- ggplot2::geom_qq_line
-  aes <- ggplot2::aes(sample = y, col = label)
+  aes <- ggplot2::aes(sample = y, col = hue)
   make_geom(df,geom_type,aes,args)
 }
 
 ## compare geoms
 
-col <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
+col <- function(x, y=NULL,hue=NULL, ...) {
+  args <- list(...); validate_args(hue,args)
   df <- make_df(x, y)
   df$x <- as.factor(df$x)
   geom_type <- ggplot2::geom_col  
-  aes <- ggplot2::aes(x = x, y = y, fill = label)
+  aes <- ggplot2::aes(x = x, y = y, fill = hue)
   args$position <- 'dodge'
   make_geom(df,geom_type,aes,args)
 }
 
-boxplot <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
+boxplot <- function(x, y=NULL,hue=NULL, ...) {
+  args <- list(...); validate_args(hue,args)
   if (is.null(y)) {
     y=x
     x=0
   }
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_boxplot  
-  aes <- ggplot2::aes(x = x, y = y, col = label)
+  aes <- ggplot2::aes(x = x, y = y, col = hue)
   make_geom(df,geom_type,aes,args)
 }
 
-violin <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
+violin <- function(x, y=NULL,hue=NULL, ...) {
+  args <- list(...); validate_args(hue,args)
   if (is.null(y)) {
     y=x
     x=0
   }
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_violin 
-  aes <- ggplot2::aes(x = x, y = y, fill = label, color = label)
+  aes <- ggplot2::aes(x = x, y = y, fill = hue, color = hue)
   args$alpha <- 0.5
   args$scale <- 'area'
   make_geom(df,geom_type,aes,args)
