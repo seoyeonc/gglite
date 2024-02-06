@@ -44,9 +44,17 @@ line <- function(x, y = NULL, label = NULL, ...) {
   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
     args[names(args) %in% c("col", "color", "colour")] <- NULL
     warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
-  }
-
-  return(do.call(ggplot2::geom_line, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, group = group, col = label)), args)))
+  } 
+  do.call(ggplot2::geom_line, c(list(
+      data = df, 
+      mapping = ggplot2::aes(
+          x = x, 
+          y = y, 
+          group = ifelse(is.null(df$group), NULL, df$group), 
+          col = label
+      )), 
+      args
+  ))
 }
 
 point <- function(x, y=NULL,label=NULL, ...) {
@@ -57,8 +65,16 @@ point <- function(x, y=NULL,label=NULL, ...) {
     args[names(args) %in% c("col", "color", "colour")] <- NULL
     warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
   }
-
-  return(do.call(ggplot2::geom_point, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, group = group, col = label)), args)))
+  do.call(ggplot2::geom_line, c(list(
+      data = df, 
+      mapping = ggplot2::aes(
+          x = x, 
+          y = y, 
+          group = ifelse(is.null(df$group), NULL, df$group), 
+          col = label
+      )), 
+      args
+  ))    
 }
 
 ## 2d geoms
