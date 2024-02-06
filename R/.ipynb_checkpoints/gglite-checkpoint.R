@@ -65,7 +65,7 @@ point <- function(x, y=NULL,label=NULL, ...) {
     args[names(args) %in% c("col", "color", "colour")] <- NULL
     warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
   }
-  do.call(ggplot2::geom_line, c(list(
+  do.call(ggplot2::geom_point, c(list(
       data = df, 
       mapping = ggplot2::aes(
           x = x, 
@@ -86,7 +86,16 @@ smooth <- function(x, y=NULL,label=NULL, ...) {
     args[names(args) %in% c("col", "color", "colour")] <- NULL
     warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
   }
-  return(do.call(ggplot2::geom_smooth, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, group = group, col = label)), args)))
+  do.call(ggplot2::geom_smooth, c(list(
+      data = df, 
+      mapping = ggplot2::aes(
+          x = x, 
+          y = y, 
+          group = ifelse(is.null(df$group), NULL, df$group), 
+          col = label
+      )), 
+      args
+  ))
 }
 
 # area <- function(x, y=NULL,label=NULL, ...) {
@@ -106,7 +115,16 @@ step <- function(x, y=NULL,label=NULL, ...) {
     args[names(args) %in% c("col", "color", "colour")] <- NULL
     warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
   }
-  return(do.call(ggplot2::geom_step, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, group = group, col = label)), args)))
+  do.call(ggplot2::geom_step, c(list(
+      data = df, 
+      mapping = ggplot2::aes(
+          x = x, 
+          y = y, 
+          group = ifelse(is.null(df$group), NULL, df$group), 
+          col = label
+      )), 
+      args
+  ))
 }
 
 jitter <- function(x, y=NULL,label=NULL, ...) {
@@ -116,7 +134,16 @@ jitter <- function(x, y=NULL,label=NULL, ...) {
     args[names(args) %in% c("col", "color", "colour")] <- NULL
     warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
   }
-  return(do.call(ggplot2::geom_jitter, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, group = group, col = label)), args)))
+  do.call(ggplot2::geom_jitter, c(list(
+      data = df, 
+      mapping = ggplot2::aes(
+          x = x, 
+          y = y, 
+          group = ifelse(is.null(df$group), NULL, df$group), 
+          col = label
+      )), 
+      args
+  ))    
 }
 
 ## 1d geoms
@@ -127,7 +154,16 @@ histogram <- function(y,label=NULL, ...) {
     args[names(args) %in% c("fill")] <- NULL
     warning("When the label option is used, the 'fill' option will be ignored.")
   }
-  return(do.call(ggplot2::geom_histogram, c(list(data = df, mapping = ggplot2::aes(x = y, y = stat(density), group = group, fill = label), alpha = 0.5, bins = 30, position = "identity"), args)))
+  do.call(ggplot2::geom_histogram, c(list(
+      data = df, 
+      mapping = ggplot2::aes(
+          x = y, 
+          y = stat(density), 
+          group = ifelse(is.null(df$group), NULL, df$group), 
+          fill = label,
+      ),alpha=0.5, position="identity"), 
+      args
+  ))    
 }
 
 density <- function(y,label=NULL, ...) {
