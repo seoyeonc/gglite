@@ -58,7 +58,7 @@ line <- function(x, y = NULL, label = NULL, ...) {
   df <- make_df(x, y)
   func <- ggplot2::geom_line
   aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(fucn,aes,args)
+  make_geom(func,aes,args)
 }
 
 point <- function(x, y=NULL,label=NULL, ...) {
