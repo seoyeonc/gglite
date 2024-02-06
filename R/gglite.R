@@ -34,18 +34,28 @@ make_df <- function(x, y = NULL) {
   return(df)
 }
 
+check_args <- function(label, args) {
+  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
+    stop("asdf")
+  }
+}
+
+make_geom <- function(df,geom_type,aes,args) {
+  args1 <- list(data = df, mapping = aes)
+  args2 <- args
+  do.call(geom_type, c(args1,args2))    
+}
+
+
+
 ## main geoms
 
 line <- function(x, y = NULL, label = NULL, ...) {
-  args <- list(...)
+  args <- list(...); check_args(args)
   df <- make_df(x, y)
-
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
-    args[names(args) %in% c("col", "color", "colour")] <- NULL
-    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
-  }
-
-  return(do.call(ggplot2::geom_line, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label, group = label)), args)))
+  geom_type <- ggplot2::geom_line
+  aes <- ggplot2::aes(x = x, y = y, col = label, group = label)
+  make_geom(df,geom_type,aes,args)
 }
 
 point <- function(x, y=NULL,label=NULL, ...) {
