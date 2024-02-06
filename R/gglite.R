@@ -18,7 +18,7 @@ make_df <- function(x, y = NULL) {
       dfx <- data.frame(x)
       dfy <- data.frame(y)
       df <- cbind(dfx,dfy)
-      df <- tidyr::pivot_longer(df,cols = colnames(dfy), names_to = "label", values_to = "y")
+      df <- tidyr::pivot_longer(df, cols = colnames(dfy), names_to = "label", values_to = "y")
   } else {
       df <- data.frame(x=x,y=y)
   }
@@ -58,7 +58,7 @@ line <- function(x, y = NULL, label = NULL, ...) {
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_line
   aes <- ggplot2::aes(x = x, y = y, group = label)
-  make_geom(df,geom_type,aes,args)
+  make_geom(df,geom_type,aes,args)+scale_color_manual(values = args$col)
 }
 
 point <- function(x, y=NULL,label=NULL, ...) {
