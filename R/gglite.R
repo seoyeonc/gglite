@@ -1,17 +1,8 @@
+## sub-functions
 options(jupyter.plot_scale=4)
 options(repr.plot.width=6,repr.plot.height=2.5,repr.plot.res=300)
 figsize <- function(width=6,height=2.5){
     options(repr.plot.width=width,repr.plot.height=height,repr.plot.res=300)
-}
-
-gglite <- function(...){
-    ggplot2::ggplot(...)+
-    ggplot2::theme_bw()+
-    ggplot2::theme(panel.border=ggplot2::element_blank(),axis.line=ggplot2::element_line(colour="black"))+
-    ggplot2::theme(axis.title.x=ggplot2::element_text(size=ggplot2::rel(1),lineheight=0.9,face="bold.italic"))+
-    ggplot2::theme(axis.title.y=ggplot2::element_text(size=ggplot2::rel(1),lineheight=0.9,face="bold.italic"))+
-    ggplot2::theme(plot.title=ggplot2::element_text(size=ggplot2::rel(1),lineheight=0.9,face="bold"))+
-    ggplot2::theme(plot.margin = ggplot2::unit(c(3,3,0,0), "mm"))
 }
 
 make_df <- function(x, y = NULL) {
@@ -47,6 +38,19 @@ make_geom <- function(func,aes,args) {
   args2 <- args
   do.call(func, c(args1,args2))    
 }
+
+## gglite
+
+gglite <- function(...){
+    ggplot2::ggplot(...)+
+    ggplot2::theme_bw()+
+    ggplot2::theme(panel.border=ggplot2::element_blank(),axis.line=ggplot2::element_line(colour="black"))+
+    ggplot2::theme(axis.title.x=ggplot2::element_text(size=ggplot2::rel(1),lineheight=0.9,face="bold.italic"))+
+    ggplot2::theme(axis.title.y=ggplot2::element_text(size=ggplot2::rel(1),lineheight=0.9,face="bold.italic"))+
+    ggplot2::theme(plot.title=ggplot2::element_text(size=ggplot2::rel(1),lineheight=0.9,face="bold"))+
+    ggplot2::theme(plot.margin = ggplot2::unit(c(3,3,0,0), "mm"))
+}
+
 ## main geoms
 
 line <- function(x, y = NULL, label = NULL, ...) {
