@@ -31,7 +31,7 @@ make_args <- function(color_tag, args) {
     stop("asdfasdf")
   } else {
     args$label <- args$color_tag
-    args$color_tag <- Null
+    args$color_tag <- NULL
   }
   return(args)
 }
