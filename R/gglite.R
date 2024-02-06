@@ -1,45 +1,8 @@
-## sub-functions
 options(jupyter.plot_scale=4)
 options(repr.plot.width=6,repr.plot.height=2.5,repr.plot.res=300)
 figsize <- function(width=6,height=2.5){
     options(repr.plot.width=width,repr.plot.height=height,repr.plot.res=300)
 }
-
-make_df <- function(x, y = NULL) {
-  if (is.null(y)) {
-    y <- x
-    if (!is.vector(y)) {
-      x <- 1:dim(y)[1]
-    } else {
-      x <- 1:length(y)
-    }
-  }
-  if (!is.vector(y)) {
-      dfx <- data.frame(x)
-      dfy <- data.frame(y)
-      df <- cbind(dfx,dfy)
-      df <- tidyr::pivot_longer(df, cols = colnames(dfy), names_to = "label", values_to = "y")
-  } else {
-      df <- data.frame(x=x,y=y)
-  }
-  return(df)
-}
-
-make_args <- function(label, args) {
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour", "fill"))) {
-    args[names(args) %in% c("col", "color", "colour", "fill")] <- NULL
-    warning("When the label option is used, the 'color' (or 'colour' or 'col') and 'fill' option will be ignored.")
-  }
-  return(args)
-}
-
-make_geom <- function(df,geom_type,aes,args) {
-  args1 <- list(data = df, mapping = aes)
-  args2 <- args
-  do.call(geom_type, c(args1,args2))    
-}
-
-## gglite
 
 gglite <- function(...){
     ggplot2::ggplot(...)+
@@ -51,122 +14,172 @@ gglite <- function(...){
     ggplot2::theme(plot.margin = ggplot2::unit(c(3,3,0,0), "mm"))
 }
 
+prepare_data <- function(x, y = NULL) {
+  if (is.null(y)) {
+    y=x
+    if (!is.vector(y)) {
+      x = 1:dim(y)[1]
+    } else {
+      x = 1:length(y)
+    }
+  }
+  if (!is.vector(y)) {
+      dfx = data.frame(x)
+      dfy = data.frame(y)
+      df = cbind(dfx,dfy)
+      df = tidyr::pivot_longer(df,cols = colnames(y), names_to = "label", values_to = "y")
+  } else {
+      df = data.frame(x=x,y=y)
+  }
+  return(df)
+}
+
 ## main geoms
 
 line <- function(x, y = NULL, label = NULL, ...) {
-  args_bck <- list(...)
-  args <- make_args(label,list(...))
-  df <- make_df(x, y)
-  geom_type <- ggplot2::geom_line
-  aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(df,geom_type,aes,args)+scale_color_manual(values = args_bck$col)
+  args <- list(...)
+  df <- prepare_data(x, y)
+
+  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
+    args[names(args) %in% c("col", "color", "colour")] <- NULL
+    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
+  }
+
+  return(do.call(ggplot2::geom_line, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label)), args)))
 }
 
 point <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
-  df <- make_df(x, y)
-  geom_type <- ggplot2::geom_point
-  aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(df,geom_type,aes,args)
+  args <- list(...)
+  df = prepare_data(x, y)
+
+  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
+    args[names(args) %in% c("col", "color", "colour")] <- NULL
+    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
+  }
+
+  return(do.call(ggplot2::geom_point, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label)), args)))
 }
 
 ## 2d geoms
 
 smooth <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
-  df <- make_df(x, y)
-  geom_type <- ggplot2::geom_smooth
-  aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(df,geom_type,aes,args)
+  args <- list(...)
+  df = prepare_data(x, y)
+  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
+    args[names(args) %in% c("col", "color", "colour")] <- NULL
+    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
+  }
+  return(do.call(ggplot2::geom_smooth, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label)), args)))
 }
 
+# area <- function(x, y=NULL,label=NULL, ...) {
+#   args <- list(...)
+#   df = prepare_data(x, y)
+#   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
+#     args[names(args) %in% c("col", "color", "colour","fill")] <- NULL
+#     warning("When the label option is used, the 'color' (or 'colour' or 'col') and 'fill' options will be ignored.")
+#   }
+#   return(do.call(ggplot2::geom_area, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, fill = label, col = label), alpha = 0.1), args)))
+# }
+
 step <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
-  df <- make_df(x, y)
-  geom_type <- ggplot2::geom_step
-  aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(df,geom_type,aes,args)
+  args <- list(...)
+  df = prepare_data(x, y)
+  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
+    args[names(args) %in% c("col", "color", "colour")] <- NULL
+    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
+  }
+  return(do.call(ggplot2::geom_step, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label)), args)))
 }
 
 jitter <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
-  df <- make_df(x, y)
-  geom_type <- ggplot2::geom_jitter    
-  aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(df,geom_type,aes,args)
+  args <- list(...)
+  df = prepare_data(x, y)
+  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
+    args[names(args) %in% c("col", "color", "colour")] <- NULL
+    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
+  }
+  return(do.call(ggplot2::geom_jitter, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label)), args)))
 }
-
 
 ## 1d geoms
 histogram <- function(y,label=NULL, ...) {
-  args <- make_args(label,list(...))
-  df <- make_df(y)
-  geom_type <- ggplot2::geom_histogram
-  aes <- ggplot2::aes(x = y, y = stat(density), fill = label)
-  args$alpha <- 0.5
-  args$position <- "identity"
-  make_geom(df,geom_type,aes,args)
+  args <- list(...)
+  df = prepare_data(y)
+  if (!is.null(label) && any(names(args) %in% c("fill"))) {
+    args[names(args) %in% c("fill")] <- NULL
+    warning("When the label option is used, the 'fill' option will be ignored.")
+  }
+  return(do.call(ggplot2::geom_histogram, c(list(data = df, mapping = ggplot2::aes(x = y, y = stat(density), fill = label), alpha = 0.5, bins = 30, position = "identity"), args)))
 }
 
 density <- function(y,label=NULL, ...) {
-  args <- make_args(label,list(...))
-  df <- make_df(y)
-  geom_type <- ggplot2::geom_density
-  aes <- ggplot2::aes(x = y, fill = label, col = label)
-  args$alpha <- 0.25
-  make_geom(df,geom_type,aes,args)
+  args <- list(...)
+  df = prepare_data(y)
+  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
+    args[names(args) %in% c("col", "color", "colour","fill")] <- NULL
+    warning("When the label option is used, the 'color' (or 'colour' or 'col') and 'fill' options will be ignored.")
+  }
+  return(do.call(ggplot2::geom_density, c(list(data = df, mapping = ggplot2::aes(x = y, fill = label, col = label), alpha = 0.25), args)))
 }
 
 qq <- function(y,label=NULL, ...) {
-  args <- make_args(label,list(...))
-  df <- data.frame(y)
-  geom_type <- ggplot2::geom_qq
-  aes <- ggplot2::aes(sample = y, col = label)
-  make_geom(df,geom_type,aes,args)
+  args <- list(...)
+  df = data.frame(y)
+  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
+    args[names(args) %in% c("col", "color", "colour")] <- NULL
+    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
+  }
+  return(do.call(ggplot2::geom_qq, c(list(data = df, mapping = ggplot2::aes(sample = y, col = label)), args)))
 }
 
 qq_line <- function(y,label=NULL, ...) {
-  args <- make_args(label,list(...))
-  df <- data.frame(y)
-  geom_type <- ggplot2::geom_qq_line
-  aes <- ggplot2::aes(sample = y, col = label)
-  make_geom(df,geom_type,aes,args)
+  args <- list(...)
+  df = data.frame(y)
+  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
+    args[names(args) %in% c("col", "color", "colour")] <- NULL
+    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
+  }
+  return(do.call(ggplot2::geom_qq_line, c(list(data = df, mapping = ggplot2::aes(sample = y, col = label)), args)))
 }
 
 ## compare geoms
 
 col <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
-  df <- make_df(x, y)
-  df$x <- as.factor(df$x)
-  geom_type <- ggplot2::geom_col  
-  aes <- ggplot2::aes(x = x, y = y, fill = label)
-  args$position <- 'dodge'
-  make_geom(df,geom_type,aes,args)
+  args <- list(...)
+  df = prepare_data(x, y)
+  df$x = as.factor(df$x)
+  if (!is.null(label) && any(names(args) %in% c("fill"))) {
+    args[names(args) %in% c("fill")] <- NULL
+    warning("When the label option is used, the 'fill' option will be ignored.")
+  }
+  return(do.call(ggplot2::geom_col, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, fill = label), position = 'dodge'), args)))
 }
 
 boxplot <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
+  args <- list(...)
   if (is.null(y)) {
     y=x
     x=0
   }
-  df <- make_df(x, y)
-  geom_type <- ggplot2::geom_boxplot  
-  aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(df,geom_type,aes,args)
+  df = prepare_data(x, y)
+  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
+    args[names(args) %in% c("col", "color", "colour")] <- NULL
+    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
+  }
+  return(do.call(ggplot2::geom_boxplot, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label)), args)))
 }
 
 violin <- function(x, y=NULL,label=NULL, ...) {
-  args <- make_args(label,list(...))
+  args <- list(...)
   if (is.null(y)) {
     y=x
     x=0
   }
-  df <- make_df(x, y)
-  geom_type <- ggplot2::geom_violin 
-  aes <- ggplot2::aes(x = x, y = y, fill = label, color = label)
-  args$alpha <- 0.5
-  args$scale <- 'area'
-  make_geom(df,geom_type,aes,args)
+  df = prepare_data(x, y)
+  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
+    args[names(args) %in% c("col", "color", "colour","fill")] <- NULL
+    warning("When the label option is used, the 'color' (or 'colour' or 'col') and 'fill' options will be ignored.")
+  }
+  return(do.call(ggplot2::geom_violin, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, fill = label, color = label), alpha = 0.5, scale = 'area'), args)))
 }
