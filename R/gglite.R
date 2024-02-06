@@ -36,7 +36,7 @@ make_df <- function(x, y = NULL) {
 
 check_args <- function(label, args) {
   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
-    stop("asdf")
+    stop("You cannot use the combination of (label, color) or (label, fill) options because when you use the 'label' option, 'color' or 'fill' is automatically set based on the categories.")
   }
 }
 
