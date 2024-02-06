@@ -27,7 +27,7 @@ prepare_data <- function(x, y = NULL) {
       dfx = data.frame(x)
       dfy = data.frame(y)
       df = cbind(dfx,dfy)
-      df = tidyr::pivot_longer(df,cols = colnames(y), names_to = "label", values_to = "y")
+      df = tidyr::pivot_longer(df,cols = colnames(df), names_to = "label", values_to = "y")
   } else {
       df = data.frame(x=x,y=y)
   }

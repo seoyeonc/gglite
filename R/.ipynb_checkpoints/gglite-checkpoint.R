@@ -1,10 +1,16 @@
+options(jupyter.plot_scale=4)
+options(repr.plot.width=6,repr.plot.height=2.5,repr.plot.res=300)
+figsize <- function(width=6,height=2.5){
+    options(repr.plot.width=width,repr.plot.height=height,repr.plot.res=300)
+}
+
 gglite <- function(...){
     ggplot2::ggplot(...)+
     ggplot2::theme_bw()+
     ggplot2::theme(panel.border=ggplot2::element_blank(),axis.line=ggplot2::element_line(colour="black"))+
     ggplot2::theme(axis.title.x=ggplot2::element_text(size=ggplot2::rel(1),lineheight=0.9,face="bold.italic"))+
     ggplot2::theme(axis.title.y=ggplot2::element_text(size=ggplot2::rel(1),lineheight=0.9,face="bold.italic"))+
-    ggplot2::theme(plot.title=ggplot2::element_text(size=ggplot2::rel(2),lineheight=0.9,face="bold.italic"))+
+    ggplot2::theme(plot.title=ggplot2::element_text(size=ggplot2::rel(1),lineheight=0.9,face="bold"))+
     ggplot2::theme(plot.margin = ggplot2::unit(c(3,3,0,0), "mm"))
 }
 
@@ -21,7 +27,7 @@ prepare_data <- function(x, y = NULL) {
       dfx = data.frame(x)
       dfy = data.frame(y)
       df = cbind(dfx,dfy)
-      df = dplyr::pivot_longer(df,cols = colnames(y), names_to = "label", values_to = "y")
+      df = tidyr::pivot_longer(df,cols = colnames(df), names_to = "label", values_to = "y")
   } else {
       df = data.frame(x=x,y=y)
   }
@@ -66,15 +72,15 @@ smooth <- function(x, y=NULL,label=NULL, ...) {
   return(do.call(ggplot2::geom_smooth, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label)), args)))
 }
 
-area <- function(x, y=NULL,label=NULL, ...) {
-  args <- list(...)
-  df = prepare_data(x, y)
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
-    args[names(args) %in% c("col", "color", "colour","fill")] <- NULL
-    warning("When the label option is used, the 'color' (or 'colour' or 'col') and 'fill' options will be ignored.")
-  }
-  return(do.call(ggplot2::geom_area, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, fill = label, col = label), alpha = 0.1), args)))
-}
+# area <- function(x, y=NULL,label=NULL, ...) {
+#   args <- list(...)
+#   df = prepare_data(x, y)
+#   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
+#     args[names(args) %in% c("col", "color", "colour","fill")] <- NULL
+#     warning("When the label option is used, the 'color' (or 'colour' or 'col') and 'fill' options will be ignored.")
+#   }
+#   return(do.call(ggplot2::geom_area, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, fill = label, col = label), alpha = 0.1), args)))
+# }
 
 step <- function(x, y=NULL,label=NULL, ...) {
   args <- list(...)
