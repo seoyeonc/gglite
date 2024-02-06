@@ -51,135 +51,119 @@ make_geom <- function(df,geom_type,aes,args) {
 ## main geoms
 
 line <- function(x, y = NULL, label = NULL, ...) {
-  args <- list(...); check_args(args)
+  args <- list(...); check_args(label,args)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_line
   aes <- ggplot2::aes(x = x, y = y, col = label, group = label)
   make_geom(df,geom_type,aes,args)
 }
 
+
 point <- function(x, y=NULL,label=NULL, ...) {
-  args <- list(...)
-  df = make_df(x, y)
-
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
-    args[names(args) %in% c("col", "color", "colour")] <- NULL
-    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
-  }
-
-  return(do.call(ggplot2::geom_point, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label, group = label)), args)))
+  args <- list(...); check_args(label,args)
+  df <- make_df(x, y)
+  geom_type <- ggplot2::geom_point
+  aes <- ggplot2::aes(x = x, y = y, col = label)
+  make_geom(df,geom_type,aes,args)
 }
 
 ## 2d geoms
 
 smooth <- function(x, y=NULL,label=NULL, ...) {
-  args <- list(...)
-  df = make_df(x, y)
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
-    args[names(args) %in% c("col", "color", "colour")] <- NULL
-    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
-  }
-  return(do.call(ggplot2::geom_smooth, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label, group = label)), args)))
+  args <- list(...); check_args(label,args)
+  df <- make_df(x, y)
+  geom_type <- ggplot2::geom_smooth
+  aes <- ggplot2::aes(x = x, y = y, col = label)
+  make_geom(df,geom_type,aes,args)
 }
 
 step <- function(x, y=NULL,label=NULL, ...) {
-  args <- list(...)
-  df = make_df(x, y)
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
-    args[names(args) %in% c("col", "color", "colour")] <- NULL
-    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
-  }
-  return(do.call(ggplot2::geom_step, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label, group = label)), args)))
+  args <- list(...); check_args(label,args)
+  df <- make_df(x, y)
+  geom_type <- ggplot2::geom_step
+  aes <- ggplot2::aes(x = x, y = y, col = label)
+  make_geom(df,geom_type,aes,args)
 }
 
 jitter <- function(x, y=NULL,label=NULL, ...) {
-  args <- list(...)
-  df = make_df(x, y)
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
-    args[names(args) %in% c("col", "color", "colour")] <- NULL
-    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
-  }
-  return(do.call(ggplot2::geom_jitter, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label, group = label)), args)))
+  args <- list(...); check_args(label,args)
+  df <- make_df(x, y)
+  geom_type <- ggplot2::geom_jitter    
+  aes <- ggplot2::aes(x = x, y = y, col = label)
+  make_geom(df,geom_type,aes,args)
 }
+
 
 ## 1d geoms
 histogram <- function(y,label=NULL, ...) {
-  args <- list(...)
-  df = make_df(y)
-  if (!is.null(label) && any(names(args) %in% c("fill"))) {
-    args[names(args) %in% c("fill")] <- NULL
-    warning("When the label option is used, the 'fill' option will be ignored.")
-  }
-  return(do.call(ggplot2::geom_histogram, c(list(data = df, mapping = ggplot2::aes(x = y, y = stat(density), fill = label, group = label), alpha = 0.5, bins = 30, position = "identity"), args)))
+  args <- list(...); check_args(label,args)
+  df <- make_df(y)
+  geom_type <- ggplot2::geom_histogram
+  aes <- ggplot2::aes(x = y, y = stat(density), fill = label)
+  args$alpha <- 0.5
+  args$position <- "identity"
+  make_geom(df,geom_type,aes,args)
 }
 
 density <- function(y,label=NULL, ...) {
-  args <- list(...)
-  df = make_df(y)
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
-    args[names(args) %in% c("col", "color", "colour","fill")] <- NULL
-    warning("When the label option is used, the 'color' (or 'colour' or 'col') and 'fill' options will be ignored.")
-  }
-  return(do.call(ggplot2::geom_density, c(list(data = df, mapping = ggplot2::aes(x = y, fill = label, col = label, group = label), alpha = 0.25), args)))
+  args <- list(...); check_args(label,args)
+  df <- make_df(y)
+  geom_type <- ggplot2::geom_density
+  aes <- ggplot2::aes(x = y, fill = label, col = label)
+  args$alpha <- 0.25
+  make_geom(df,geom_type,aes,args)
 }
 
 qq <- function(y,label=NULL, ...) {
-  args <- list(...)
-  df = data.frame(y)
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
-    args[names(args) %in% c("col", "color", "colour")] <- NULL
-    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
-  }
-  return(do.call(ggplot2::geom_qq, c(list(data = df, mapping = ggplot2::aes(sample = y, col = label, group = label)), args)))
+  args <- list(...); check_args(label,args)
+  df <- data.frame(y)
+  geom_type <- ggplot2::geom_qq
+  aes <- ggplot2::aes(sample = y, col = label)
+  make_geom(df,geom_type,aes,args)
 }
 
 qq_line <- function(y,label=NULL, ...) {
-  args <- list(...)
-  df = data.frame(y)
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
-    args[names(args) %in% c("col", "color", "colour")] <- NULL
-    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
-  }
-  return(do.call(ggplot2::geom_qq_line, c(list(data = df, mapping = ggplot2::aes(sample = y, col = label, group = label)), args)))
+  args <- list(...); check_args(label,args)
+  df <- data.frame(y)
+  geom_type <- ggplot2::geom_qq_line
+  aes <- ggplot2::aes(sample = y, col = label)
+  make_geom(df,geom_type,aes,args)
 }
 
 ## compare geoms
 
 col <- function(x, y=NULL,label=NULL, ...) {
-  args <- list(...)
-  df = make_df(x, y)
-  df$x = as.factor(df$x)
-  if (!is.null(label) && any(names(args) %in% c("fill"))) {
-    args[names(args) %in% c("fill")] <- NULL
-    warning("When the label option is used, the 'fill' option will be ignored.")
-  }
-  return(do.call(ggplot2::geom_col, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, fill = label, group = label), position = 'dodge'), args)))
+  args <- list(...); check_args(label,args)
+  df <- make_df(x, y)
+  df$x <- as.factor(df$x)
+  geom_type <- ggplot2::geom_col  
+  aes <- ggplot2::aes(x = x, y = y, fill = label)
+  args$position <- 'dodge'
+  make_geom(df,geom_type,aes,args)
 }
 
 boxplot <- function(x, y=NULL,label=NULL, ...) {
-  args <- list(...)
+  args <- list(...); check_args(label,args)
   if (is.null(y)) {
     y=x
     x=0
   }
-  df = make_df(x, y)
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
-    args[names(args) %in% c("col", "color", "colour")] <- NULL
-    warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
-  }
-  return(do.call(ggplot2::geom_boxplot, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label, group = label)), args)))
+  df <- make_df(x, y)
+  geom_type <- ggplot2::geom_boxplot  
+  aes <- ggplot2::aes(x = x, y = y, col = label)
+  make_geom(df,geom_type,aes,args)
 }
 
 violin <- function(x, y=NULL,label=NULL, ...) {
-  args <- list(...)
+  args <- list(...); check_args(label,args)
   if (is.null(y)) {
     y=x
     x=0
   }
-  df = make_df(x, y)
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
-    args[names(args) %in% c("col", "color", "colour","fill")] <- NULL
-    warning("When the label option is used, the 'color' (or 'colour' or 'col') and 'fill' options will be ignored.")
-  }
-  return(do.call(ggplot2::geom_violin, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, fill = label, color = label, group = label), alpha = 0.5, scale = 'area'), args)))
+  df <- make_df(x, y)
+  geom_type <- ggplot2::geom_violin 
+  aes <- ggplot2::aes(x = x, y = y, fill = label, color = label)
+  args$alpha <- 0.5
+  args$scale <- 'area'
+  make_geom(df,geom_type,aes,args)
 }
