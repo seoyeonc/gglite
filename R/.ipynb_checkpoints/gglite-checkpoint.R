@@ -90,7 +90,7 @@ step <- function(x, y=NULL,label=NULL, ...) {
 jitter <- function(x, y=NULL,label=NULL, ...) {
   args <- make_args(label,list(...))
   df <- make_df(x, y)
-  geom_type <- ggplot2::geom_smooth    
+  geom_type <- ggplot2::geom_jitter    
   aes <- ggplot2::aes(x = x, y = y, col = label)
   make_geom(df,geom_type,aes,args)
 }
@@ -105,28 +105,31 @@ histogram <- function(y,label=NULL, ...) {
   args$alpha <- 0.5
   args$position <- "identity"
   make_geom(df,geom_type,aes,args)
-  # return(do.call(ggplot2::geom_histogram, c(list(data = df, mapping = ggplot2::aes(x = y, y = stat(density), fill = label), alpha = 0.5, position = "identity"), args)))
 }
 
 density <- function(y,label=NULL, ...) {
   args <- make_args(label,list(...))
   df <- make_df(y)
-  geom_type <- ggplot2::geom_density        
-  return(do.call(ggplot2::geom_density, c(list(data = df, mapping = ggplot2::aes(x = y, fill = label, col = label), alpha = 0.25), args)))
+  geom_type <- ggplot2::geom_density
+  aes <- ggplot2::aes(x = y, fill = label, col = label)
+  args$alpha <- 0.25
+  make_geom(df,geom_type,aes,args)
 }
 
 qq <- function(y,label=NULL, ...) {
   args <- make_args(label,list(...))
   df <- data.frame(y)
-  geom_type <- ggplot2::geom_qq    
-  return(do.call(ggplot2::geom_qq, c(list(data = df, mapping = ggplot2::aes(sample = y, col = label)), args)))
+  geom_type <- ggplot2::geom_qq
+  aes <- ggplot2::aes(sample = y, col = label)
+  make_geom(df,geom_type,aes,args)
 }
 
 qq_line <- function(y,label=NULL, ...) {
   args <- make_args(label,list(...))
   df <- data.frame(y)
-  geom_type <- ggplot2::geom_qq_line        
-  return(do.call(ggplot2::geom_qq_line, c(list(data = df, mapping = ggplot2::aes(sample = y, col = label)), args)))
+  geom_type <- ggplot2::geom_qq_line
+  aes <- ggplot2::aes(sample = y, col = label)
+  make_geom(df,geom_type,aes,args)
 }
 
 ## compare geoms
@@ -136,7 +139,9 @@ col <- function(x, y=NULL,label=NULL, ...) {
   df <- make_df(x, y)
   df$x <- as.factor(df$x)
   geom_type <- ggplot2::geom_col  
-  return(do.call(ggplot2::geom_col, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, fill = label), position = 'dodge'), args)))
+  aes <- ggplot2::aes(x = x, y = y, fill = label)
+  args$position <- 'dodge'
+  make_geom(df,geom_type,aes,args)
 }
 
 boxplot <- function(x, y=NULL,label=NULL, ...) {
@@ -147,7 +152,8 @@ boxplot <- function(x, y=NULL,label=NULL, ...) {
   }
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_boxplot  
-  return(do.call(ggplot2::geom_boxplot, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label)), args)))
+  aes <- ggplot2::aes(x = x, y = y, col = label)
+  make_geom(df,geom_type,aes,args)
 }
 
 violin <- function(x, y=NULL,label=NULL, ...) {
@@ -158,5 +164,8 @@ violin <- function(x, y=NULL,label=NULL, ...) {
   }
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_violin 
-  return(do.call(ggplot2::geom_violin, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, fill = label, color = label), alpha = 0.5, scale = 'area'), args)))
+  aes <- ggplot2::aes(x = x, y = y, fill = label, color = label)
+  args$alpha <- 0.5
+  args$scale <- 'area'
+  make_geom(df,geom_type,aes,args)
 }
