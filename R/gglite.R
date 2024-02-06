@@ -54,10 +54,10 @@ gglite <- function(...){
 ## main geoms
 
 line <- function(x, y = NULL, label = NULL, ...) {
-  args <- make_args(label,list(...))
+  args <- list(...)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_line
-  aes <- ggplot2::aes(x = x, y = y, col = label)
+  aes <- ggplot2::aes(x = x, y = y, group = label)
   make_geom(df,geom_type,aes,args)
 }
 
