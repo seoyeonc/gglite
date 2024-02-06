@@ -14,7 +14,7 @@ gglite <- function(...){
     ggplot2::theme(plot.margin = ggplot2::unit(c(3,3,0,0), "mm"))
 }
 
-prepare_data <- function(x, y = NULL) {
+make_df <- function(x, y = NULL) {
   if (is.null(y)) {
     y=x
     if (!is.vector(y)) {
@@ -27,7 +27,7 @@ prepare_data <- function(x, y = NULL) {
       dfx = data.frame(x)
       dfy = data.frame(y)
       df = cbind(dfx,dfy)
-      df = tidyr::pivot_longer(df,cols = colnames(y), names_to = "label", values_to = "y")
+      df = tidyr::pivot_longer(df,cols = colnames(dfy), names_to = "label", values_to = "y")
   } else {
       df = data.frame(x=x,y=y)
   }
@@ -38,7 +38,7 @@ prepare_data <- function(x, y = NULL) {
 
 line <- function(x, y = NULL, label = NULL, ...) {
   args <- list(...)
-  df <- prepare_data(x, y)
+  df <- make_df(x, y)
 
   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
     args[names(args) %in% c("col", "color", "colour")] <- NULL
@@ -50,7 +50,7 @@ line <- function(x, y = NULL, label = NULL, ...) {
 
 point <- function(x, y=NULL,label=NULL, ...) {
   args <- list(...)
-  df = prepare_data(x, y)
+  df = make_df(x, y)
 
   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
     args[names(args) %in% c("col", "color", "colour")] <- NULL
@@ -64,7 +64,7 @@ point <- function(x, y=NULL,label=NULL, ...) {
 
 smooth <- function(x, y=NULL,label=NULL, ...) {
   args <- list(...)
-  df = prepare_data(x, y)
+  df = make_df(x, y)
   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
     args[names(args) %in% c("col", "color", "colour")] <- NULL
     warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
@@ -74,7 +74,7 @@ smooth <- function(x, y=NULL,label=NULL, ...) {
 
 # area <- function(x, y=NULL,label=NULL, ...) {
 #   args <- list(...)
-#   df = prepare_data(x, y)
+#   df = make_df(x, y)
 #   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
 #     args[names(args) %in% c("col", "color", "colour","fill")] <- NULL
 #     warning("When the label option is used, the 'color' (or 'colour' or 'col') and 'fill' options will be ignored.")
@@ -84,7 +84,7 @@ smooth <- function(x, y=NULL,label=NULL, ...) {
 
 step <- function(x, y=NULL,label=NULL, ...) {
   args <- list(...)
-  df = prepare_data(x, y)
+  df = make_df(x, y)
   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
     args[names(args) %in% c("col", "color", "colour")] <- NULL
     warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
@@ -94,7 +94,7 @@ step <- function(x, y=NULL,label=NULL, ...) {
 
 jitter <- function(x, y=NULL,label=NULL, ...) {
   args <- list(...)
-  df = prepare_data(x, y)
+  df = make_df(x, y)
   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
     args[names(args) %in% c("col", "color", "colour")] <- NULL
     warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
@@ -105,7 +105,7 @@ jitter <- function(x, y=NULL,label=NULL, ...) {
 ## 1d geoms
 histogram <- function(y,label=NULL, ...) {
   args <- list(...)
-  df = prepare_data(y)
+  df = make_df(y)
   if (!is.null(label) && any(names(args) %in% c("fill"))) {
     args[names(args) %in% c("fill")] <- NULL
     warning("When the label option is used, the 'fill' option will be ignored.")
@@ -115,7 +115,7 @@ histogram <- function(y,label=NULL, ...) {
 
 density <- function(y,label=NULL, ...) {
   args <- list(...)
-  df = prepare_data(y)
+  df = make_df(y)
   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
     args[names(args) %in% c("col", "color", "colour","fill")] <- NULL
     warning("When the label option is used, the 'color' (or 'colour' or 'col') and 'fill' options will be ignored.")
@@ -147,7 +147,7 @@ qq_line <- function(y,label=NULL, ...) {
 
 col <- function(x, y=NULL,label=NULL, ...) {
   args <- list(...)
-  df = prepare_data(x, y)
+  df = make_df(x, y)
   df$x = as.factor(df$x)
   if (!is.null(label) && any(names(args) %in% c("fill"))) {
     args[names(args) %in% c("fill")] <- NULL
@@ -162,7 +162,7 @@ boxplot <- function(x, y=NULL,label=NULL, ...) {
     y=x
     x=0
   }
-  df = prepare_data(x, y)
+  df = make_df(x, y)
   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour"))) {
     args[names(args) %in% c("col", "color", "colour")] <- NULL
     warning("When the label option is used, the 'color' (or 'colour' or 'col') option will be ignored.")
@@ -176,7 +176,7 @@ violin <- function(x, y=NULL,label=NULL, ...) {
     y=x
     x=0
   }
-  df = prepare_data(x, y)
+  df = make_df(x, y)
   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
     args[names(args) %in% c("col", "color", "colour","fill")] <- NULL
     warning("When the label option is used, the 'color' (or 'colour' or 'col') and 'fill' options will be ignored.")
