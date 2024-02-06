@@ -25,12 +25,10 @@ make_df <- function(x, y = NULL) {
   return(df)
 }
 
-make_args <- function(color_tag, args) {
-  if (!is.null(color_tag) && any(names(args) %in% c("col", "color", "colour", "fill"))) {
-    stop("color_tag cannot be used with the colour or fill options.")
-  } else {
-    args$label <- args$color_tag
-    args$color_tag <- NULL
+make_args <- function(label, args) {
+  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour", "fill"))) {
+    args[names(args) %in% c("col", "color", "colour", "fill")] <- NULL
+    warning("When the label option is used, the 'color' (or 'colour' or 'col') and 'fill' option will be ignored.")
   }
   return(args)
 }
@@ -55,16 +53,17 @@ gglite <- function(...){
 
 ## main geoms
 
-line <- function(x, y = NULL, color_tag=NULL, ...) {
-  args <- make_args(color_tag,list(...))
+line <- function(x, y = NULL, label = NULL, ...) {
+  args_bck <- list(...)
+  args <- make_args(label,list(...))
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_line
   aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(df,geom_type,aes,args)
+  make_geom(df,geom_type,aes,args)+scale_color_manual(values = args_bck$col)
 }
 
-point <- function(x, y=NULL,color_tag=NULL, ...) {
-  args <- make_args(color_tag,list(...))
+point <- function(x, y=NULL,label=NULL, ...) {
+  args <- make_args(label,list(...))
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_point
   aes <- ggplot2::aes(x = x, y = y, col = label)
@@ -73,24 +72,24 @@ point <- function(x, y=NULL,color_tag=NULL, ...) {
 
 ## 2d geoms
 
-smooth <- function(x, y=NULL,color_tag=NULL, ...) {
-  args <- make_args(color_tag,list(...))
+smooth <- function(x, y=NULL,label=NULL, ...) {
+  args <- make_args(label,list(...))
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_smooth
   aes <- ggplot2::aes(x = x, y = y, col = label)
   make_geom(df,geom_type,aes,args)
 }
 
-step <- function(x, y=NULL,color_tag=NULL, ...) {
-  args <- make_args(color_tag,list(...))
+step <- function(x, y=NULL,label=NULL, ...) {
+  args <- make_args(label,list(...))
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_step
   aes <- ggplot2::aes(x = x, y = y, col = label)
   make_geom(df,geom_type,aes,args)
 }
 
-jitter <- function(x, y=NULL,color_tag=NULL, ...) {
-  args <- make_args(color_tag,list(...))
+jitter <- function(x, y=NULL,label=NULL, ...) {
+  args <- make_args(label,list(...))
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_jitter    
   aes <- ggplot2::aes(x = x, y = y, col = label)
@@ -99,8 +98,8 @@ jitter <- function(x, y=NULL,color_tag=NULL, ...) {
 
 
 ## 1d geoms
-histogram <- function(y,color_tag=NULL, ...) {
-  args <- make_args(color_tag,list(...))
+histogram <- function(y,label=NULL, ...) {
+  args <- make_args(label,list(...))
   df <- make_df(y)
   geom_type <- ggplot2::geom_histogram
   aes <- ggplot2::aes(x = y, y = stat(density), fill = label)
@@ -109,8 +108,8 @@ histogram <- function(y,color_tag=NULL, ...) {
   make_geom(df,geom_type,aes,args)
 }
 
-density <- function(y,color_tag=NULL, ...) {
-  args <- make_args(color_tag,list(...))
+density <- function(y,label=NULL, ...) {
+  args <- make_args(label,list(...))
   df <- make_df(y)
   geom_type <- ggplot2::geom_density
   aes <- ggplot2::aes(x = y, fill = label, col = label)
@@ -118,7 +117,7 @@ density <- function(y,color_tag=NULL, ...) {
   make_geom(df,geom_type,aes,args)
 }
 
-qq <- function(y,color_tag=NULL, ...) {
+qq <- function(y,label=NULL, ...) {
   args <- make_args(label,list(...))
   df <- data.frame(y)
   geom_type <- ggplot2::geom_qq
@@ -126,8 +125,8 @@ qq <- function(y,color_tag=NULL, ...) {
   make_geom(df,geom_type,aes,args)
 }
 
-qq_line <- function(y,color_tag=NULL, ...) {
-  args <- make_args(color_tag,list(...))
+qq_line <- function(y,label=NULL, ...) {
+  args <- make_args(label,list(...))
   df <- data.frame(y)
   geom_type <- ggplot2::geom_qq_line
   aes <- ggplot2::aes(sample = y, col = label)
@@ -136,8 +135,8 @@ qq_line <- function(y,color_tag=NULL, ...) {
 
 ## compare geoms
 
-col <- function(x, y=NULL,color_tag=NULL, ...) {
-  args <- make_args(color_tag,list(...))
+col <- function(x, y=NULL,label=NULL, ...) {
+  args <- make_args(label,list(...))
   df <- make_df(x, y)
   df$x <- as.factor(df$x)
   geom_type <- ggplot2::geom_col  
@@ -146,8 +145,8 @@ col <- function(x, y=NULL,color_tag=NULL, ...) {
   make_geom(df,geom_type,aes,args)
 }
 
-boxplot <- function(x, y=NULL,color_tag=NULL, ...) {
-  args <- make_args(color_tag,list(...))
+boxplot <- function(x, y=NULL,label=NULL, ...) {
+  args <- make_args(label,list(...))
   if (is.null(y)) {
     y=x
     x=0
@@ -158,8 +157,8 @@ boxplot <- function(x, y=NULL,color_tag=NULL, ...) {
   make_geom(df,geom_type,aes,args)
 }
 
-violin <- function(x, y=NULL,color_tag=NULL, ...) {
-  args <- make_args(color_tag,list(...))
+violin <- function(x, y=NULL,label=NULL, ...) {
+  args <- make_args(label,list(...))
   if (is.null(y)) {
     y=x
     x=0
