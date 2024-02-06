@@ -59,7 +59,7 @@ line <- function(x, y = NULL, label = NULL, ...) {
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_line
   aes <- ggplot2::aes(x = x, y = y, group = label)
-  make_geom(df,geom_type,aes,args)+scale_color_manual(values = args_bck$col)
+  make_geom(df,geom_type,aes,args)+scale_color_manual(values = c(args_bck$col))
 }
 
 point <- function(x, y=NULL,label=NULL, ...) {
