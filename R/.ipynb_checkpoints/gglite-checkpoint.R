@@ -42,13 +42,19 @@ make_args <- function(label, args) {
   return(args)
 }
 
-
+make_geom <- function(func,aes,args) {
+  args1 <- list(data = df, mapping = aes)
+  args2 <- args
+  do.call(func, c(args1,args2))    
+}
 ## main geoms
 
 line <- function(x, y = NULL, label = NULL, ...) {
   args <- make_args(label,list(...))
-  df <- make_df(x, y) 
-  return(do.call(ggplot2::geom_line, c(list(data = df, mapping = ggplot2::aes(x = x, y = y, col = label)), args)))
+  df <- make_df(x, y)
+  func <- ggplot2::geom_line
+  aes <- ggplot2::aes(x = x, y = y, col = label)
+  make_geom(fucn,aes,args)
 }
 
 point <- function(x, y=NULL,label=NULL, ...) {
