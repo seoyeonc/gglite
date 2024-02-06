@@ -26,9 +26,11 @@ make_df <- function(x, y = NULL) {
 }
 
 make_args <- function(color_tag, args) {
-  if (!is.null(color_tag) && any(names(args) %in% c("col", "color", "colour", "fill"))) {
+  if (is.null(color_tag)){
+    args$label <- NULL
+  } else if (!is.null(color_tag) && any(names(args) %in% c("col", "color", "colour", "fill"))) {
     args[names(args) %in% c("col", "color", "colour", "fill")] <- NULL
-    stop("asdfasdf")
+    stop("color_tag cannot be used with the colour or fill options.")
   } else {
     args$label <- args$color_tag
     args$color_tag <- NULL
