@@ -33,7 +33,7 @@ make_args <- function(label, args) {
   return(args)
 }
 
-make_geom <- function(func,aes,args) {
+make_geom <- function(df,func,aes,args) {
   args1 <- list(data = df, mapping = aes)
   args2 <- args
   do.call(func, c(args1,args2))    
@@ -58,7 +58,7 @@ line <- function(x, y = NULL, label = NULL, ...) {
   df <- make_df(x, y)
   func <- ggplot2::geom_line
   aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(func,aes,args)
+  make_geom(df,func,aes,args)
 }
 
 point <- function(x, y=NULL,label=NULL, ...) {
