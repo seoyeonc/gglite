@@ -53,7 +53,7 @@ line <- function(x, y = NULL, label = NULL, ...) {
   args <- list(...)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_line
-  aes <- ggplot2::aes(x = x, y = y, col = label, group = label)
+  aes <- ggplot2::aes(x = x, y = y, col = label)
   make_geom(df,geom_type,aes,args)
 }
 
