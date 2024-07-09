@@ -34,11 +34,11 @@ make_df <- function(x, y = NULL) {
   return(df)
 }
 
-check_args <- function(label, args) {
-  if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
-    stop("You cannot use the combination of (label, color) or (label, fill) options because when you use the 'label' option, 'color' or 'fill' is automatically set based on the categories.")
-  }
-}
+# check_args <- function(label, args) {
+#   if (!is.null(label) && any(names(args) %in% c("col", "color", "colour","fill"))) {
+#     stop("You cannot use the combination of (label, color) or (label, fill) options because when you use the 'label' option, 'color' or 'fill' is automatically set based on the categories.")
+#   }
+# }
 
 make_geom <- function(df,geom_type,aes,args) {
   args1 <- list(data = df, mapping = aes)
@@ -47,11 +47,10 @@ make_geom <- function(df,geom_type,aes,args) {
 }
 
 
-
 ## main geoms
 
 line <- function(x, y = NULL, label = NULL, ...) {
-  args <- list(...); check_args(label,args)
+  args <- list(...)
   df <- make_df(x, y)
   geom_type <- ggplot2::geom_line
   aes <- ggplot2::aes(x = x, y = y, col = label, group = label)
