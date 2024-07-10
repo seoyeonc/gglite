@@ -1,9 +1,6 @@
-options(jupyter.plot_scale=4)
-options(repr.plot.width=6,repr.plot.height=2.5,repr.plot.res=300)
-figsize <- function(width=6,height=2.5){
-    options(repr.plot.width=width,repr.plot.height=height,repr.plot.res=300)
+figsize <- function(width=6.4,height=4.8,res=175){
+    options(repr.plot.width=width,repr.plot.height=height,repr.plot.res=res)
 }
-figsize()
 
 gglite <- function(...){
     ggplot2::ggplot(...)+
