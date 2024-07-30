@@ -1,4 +1,4 @@
-figsize <- function(width=16,height=9,res=300){
+figsize <- function(width,height,res){
     options(repr.plot.width=width,repr.plot.height=height,repr.plot.res=res)
 }
 
@@ -164,4 +164,3 @@ violin <- function(x, y=NULL,label=NULL, ...) {
   args$scale <- 'area'
   make_geom(df,geom_type,aes,args)
 }
-figsize()
