@@ -1,4 +1,4 @@
-figsize <- function(width=7,height=7,res=72){
+figsize <- function(width=4,height=3,res=300){
     options(repr.plot.width=width,repr.plot.height=height,repr.plot.res=res)
 }
 
