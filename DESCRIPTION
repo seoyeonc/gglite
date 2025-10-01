@@ -1,11 +1,27 @@
 Package: gglite
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Lightweight Helpers for ggplot2
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: c(
+    person(given = "Seoyeon", family = "Choi", role = "aut",
+           comment = c(
+             affiliation = "Department of Statistics (Institute of Applied Statistics), Jeonbuk National University",
+             address = "567 Baekje-daero, Deokjin-gu, Jeonju-si, Jeollabuk-do, 54896 Republic of Korea",
+             note = "First author"
+           )),
+    person(given = "Guebin", family = "Choi", role = c("aut", "cre"),
+           email = "guebin@jbnu.ac.kr",
+           comment = c(
+             affiliation = "Department of Statistics (Institute of Applied Statistics), Jeonbuk National University",
+             address = "567 Baekje-daero, Deokjin-gu, Jeonju-si, Jeollabuk-do, 54896 Republic of Korea",
+             note = "Corresponding author"
+           ))
+  )
+Description: Provides a lightweight interface for building common ggplot2
+    visualisations with concise helper functions and a consistent theme.
+License: MIT + file LICENSE
 Encoding: UTF-8
+Depends: R (>= 3.6)
+Imports: ggplot2, tidyr
 LazyData: true
+Roxygen: list(markdown = TRUE)
