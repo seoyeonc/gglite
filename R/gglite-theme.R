@@ -14,8 +14,6 @@ gglite <- function(...) {
     ggplot2::theme_bw() +
     ggplot2::theme(panel.border = ggplot2::element_blank()) +
     ggplot2::theme(axis.line = ggplot2::element_line(colour = "black")) +
-    ggplot2::theme(axis.title.x = ggplot2::element_blank()) +
-    ggplot2::theme(axis.title.y = ggplot2::element_blank()) +
     ggplot2::theme(plot.title = ggplot2::element_text(
       size = ggplot2::rel(1), lineheight = 0.9, face = "bold"
     )) +

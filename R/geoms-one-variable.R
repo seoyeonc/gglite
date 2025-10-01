@@ -19,7 +19,9 @@ histogram <- function(y, label = NULL, ...) {
   if (is.null(args$position)) {
     args$position <- "identity"
   }
-  make_geom(df, geom_type, aes, args)
+  processed <- prepare_geom_args(df, args)
+  args <- processed$args
+  make_geom(df, geom_type, aes, args, processed$manual, processed$aes_map)
 }
 
 
@@ -40,7 +42,9 @@ density <- function(y, label = NULL, ...) {
   if (is.null(args$alpha)) {
     args$alpha <- 0.25
   }
-  make_geom(df, geom_type, aes, args)
+  processed <- prepare_geom_args(df, args)
+  args <- processed$args
+  make_geom(df, geom_type, aes, args, processed$manual, processed$aes_map)
 }
 
 
@@ -58,7 +62,9 @@ qq <- function(y, label = NULL, ...) {
   df <- apply_label(df, label)
   geom_type <- ggplot2::geom_qq
   aes <- ggplot2::aes(sample = y, col = label)
-  make_geom(df, geom_type, aes, args)
+  processed <- prepare_geom_args(df, args)
+  args <- processed$args
+  make_geom(df, geom_type, aes, args, processed$manual, processed$aes_map)
 }
 
 
@@ -76,5 +82,7 @@ qq_line <- function(y, label = NULL, ...) {
   df <- apply_label(df, label)
   geom_type <- ggplot2::geom_qq_line
   aes <- ggplot2::aes(sample = y, col = label)
-  make_geom(df, geom_type, aes, args)
+  processed <- prepare_geom_args(df, args)
+  args <- processed$args
+  make_geom(df, geom_type, aes, args, processed$manual, processed$aes_map)
 }

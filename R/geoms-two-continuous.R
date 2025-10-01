@@ -19,7 +19,9 @@ line <- function(x, y = NULL, label = NULL, ...) {
   df <- apply_label(df, label)
   geom_type <- ggplot2::geom_line
   aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(df, geom_type, aes, args)
+  processed <- prepare_geom_args(df, args)
+  args <- processed$args
+  make_geom(df, geom_type, aes, args, processed$manual, processed$aes_map)
 }
 
 
@@ -37,7 +39,9 @@ point <- function(x, y = NULL, label = NULL, ...) {
   df <- apply_label(df, label)
   geom_type <- ggplot2::geom_point
   aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(df, geom_type, aes, args)
+  processed <- prepare_geom_args(df, args)
+  args <- processed$args
+  make_geom(df, geom_type, aes, args, processed$manual, processed$aes_map)
 }
 
 
@@ -55,7 +59,9 @@ smooth <- function(x, y = NULL, label = NULL, ...) {
   df <- apply_label(df, label)
   geom_type <- ggplot2::geom_smooth
   aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(df, geom_type, aes, args)
+  processed <- prepare_geom_args(df, args)
+  args <- processed$args
+  make_geom(df, geom_type, aes, args, processed$manual, processed$aes_map)
 }
 
 
@@ -73,5 +79,7 @@ step <- function(x, y = NULL, label = NULL, ...) {
   df <- apply_label(df, label)
   geom_type <- ggplot2::geom_step
   aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(df, geom_type, aes, args)
+  processed <- prepare_geom_args(df, args)
+  args <- processed$args
+  make_geom(df, geom_type, aes, args, processed$manual, processed$aes_map)
 }

@@ -1,4 +1,5 @@
 # Generated manually in lieu of roxygen2::roxygenise()
+S3method(ggplot_add,gglite_layer)
 export(boxplot)
 export(col)
 export(density)

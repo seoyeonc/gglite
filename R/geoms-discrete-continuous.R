@@ -16,7 +16,9 @@ col <- function(x, y = NULL, label = NULL, ...) {
   if (is.null(args$position)) {
     args$position <- "dodge"
   }
-  make_geom(df, geom_type, aes, args)
+  processed <- prepare_geom_args(df, args)
+  args <- processed$args
+  make_geom(df, geom_type, aes, args, processed$manual, processed$aes_map)
 }
 
 
@@ -38,7 +40,9 @@ boxplot <- function(x, y = NULL, label = NULL, ...) {
   df <- apply_label(df, label)
   geom_type <- ggplot2::geom_boxplot
   aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(df, geom_type, aes, args)
+  processed <- prepare_geom_args(df, args)
+  args <- processed$args
+  make_geom(df, geom_type, aes, args, processed$manual, processed$aes_map)
 }
 
 
@@ -66,7 +70,9 @@ violin <- function(x, y = NULL, label = NULL, ...) {
   if (is.null(args$scale)) {
     args$scale <- "area"
   }
-  make_geom(df, geom_type, aes, args)
+  processed <- prepare_geom_args(df, args)
+  args <- processed$args
+  make_geom(df, geom_type, aes, args, processed$manual, processed$aes_map)
 }
 
 
@@ -84,5 +90,7 @@ jitter <- function(x, y = NULL, label = NULL, ...) {
   df <- apply_label(df, label)
   geom_type <- ggplot2::geom_jitter
   aes <- ggplot2::aes(x = x, y = y, col = label)
-  make_geom(df, geom_type, aes, args)
+  processed <- prepare_geom_args(df, args)
+  args <- processed$args
+  make_geom(df, geom_type, aes, args, processed$manual, processed$aes_map)
 }
