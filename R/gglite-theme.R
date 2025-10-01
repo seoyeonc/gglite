@@ -17,5 +17,6 @@ gglite <- function(...) {
     ggplot2::theme(plot.title = ggplot2::element_text(
       size = ggplot2::rel(1), lineheight = 0.9, face = "bold"
     )) +
-    ggplot2::theme(plot.margin = ggplot2::unit(c(3, 3, 0, 0), "mm"))
+    ggplot2::theme(plot.margin = ggplot2::unit(c(3, 3, 0, 0), "mm")) +
+    ggplot2::labs(x = NULL, y = NULL)
 }
