@@ -7,7 +7,7 @@ to publication-ready figures with just a few lines of code.
 
 ---
 
-## 📦 Overview
+## Overview
 - **Consistent style**: Start every plot with `gglite()` to apply a clean,
   publication-friendly theme.
 - **Cheat-sheet inspired API**: Functions mirror the structure of Posit's
@@ -18,13 +18,13 @@ to publication-ready figures with just a few lines of code.
 - **Notebook ready**: Works smoothly inside Quarto, R Markdown, or interactive
   notebooks.
 
-## 🚀 Installation
+## Installation
 ```r
 # install.packages("devtools") if needed
 devtools::install_github("seoyeonc/gglite")
 ```
 
-## 🏁 Quick start
+## Quick start
 ```r
 library(gglite)
 library(ggplot2)
@@ -47,7 +47,7 @@ p2
 p3
 ```
 
-## 🧭 Function map
+## Function map
 | Category | Helpers |
 | --- | --- |
 | **Theme starter** | `gglite()` |
@@ -57,7 +57,7 @@ p3
 
 Call `?gglite-package` or `?line` inside R for full documentation and examples.
 
-## 🛠 Development
+## Development
 ```r
 # Run package checks
 devtools::check()
@@ -66,7 +66,7 @@ devtools::check()
 devtools::document()
 ```
 
-## 📚 Citation
+## Citation
 If you use gglite in your work, please cite:
 
 > Seoyeon Choi & Guebin Choi (2025). *gglite: Lightweight helpers for ggplot2*.
@@ -85,15 +85,15 @@ BibTeX entry:
 }
 ```
 
-## 📄 License
+## License
 This project is released under the MIT License. See [`LICENSE`](LICENSE) for
 details.
 
-## 🙏 Acknowledgements
+## Acknowledgements
 - Inspired by Posit's *Data Visualization with ggplot2* (2022).
 - Built on top of the amazing [`ggplot2`](https://ggplot2.tidyverse.org/)
   ecosystem.
 
-## 🤝 Contributing
+## Contributing
 Issues, suggestions, and pull requests are welcome. If you plan a larger
 contribution, please open an issue first so we can align on direction.
