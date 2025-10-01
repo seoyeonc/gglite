@@ -19,4 +19,4 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
   gglite(mtcars, ggplot2::aes(wt, mpg)) + line(1:5, 5:1)
 }
 }
-\seealso{\code{ggplot2::ggplot()}, \code{figsize()}}
+\seealso{\code{ggplot2::ggplot()}}

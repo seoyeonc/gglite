@@ -5,7 +5,7 @@
 #'
 #' @inheritParams ggplot2::ggplot
 #' @return A ggplot object with the gglite defaults applied.
-#' @seealso [ggplot2::ggplot()], [figsize()]
+#' @seealso [ggplot2::ggplot()]
 #' @examples
 #' gglite(mtcars, ggplot2::aes(wt, mpg)) + line()
 #' @export

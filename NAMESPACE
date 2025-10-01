@@ -2,7 +2,6 @@
 export(boxplot)
 export(col)
 export(density)
-export(figsize)
 export(gglite)
 export(histogram)
 export(jitter)

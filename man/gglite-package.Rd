@@ -25,4 +25,4 @@ Department of Statistics (Institute of Applied Statistics), Jeonbuk National Uni
 567 Baekje-daero, Deokjin-gu, Jeonju-si, Jeollabuk-do, 54896 Republic of Korea
 }
 }
-\seealso{\code{gglite()}, \code{figsize()}}
+\seealso{\code{gglite()}}
