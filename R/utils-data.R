@@ -221,7 +221,7 @@ merge_manual_values <- function(existing, new) {
 #' @return A ggplot scale object flagged as gglite-generated.
 #' @keywords internal
 #' @noRd
-new_manual_scale <- function(aesthetic, values) {
+new_manual_scale <- function(aesthetic, values, guide = NULL, override = NULL) {
   scale_fun <- switch(aesthetic,
     colour = ggplot2::scale_colour_manual,
     color = ggplot2::scale_colour_manual,
@@ -229,7 +229,13 @@ new_manual_scale <- function(aesthetic, values) {
     linetype = ggplot2::scale_linetype_manual,
     stop(sprintf("Unsupported aesthetic '%s'", aesthetic))
   )
-  scale <- scale_fun(values = values)
+  args <- list(values = values)
+  if (!is.null(override) && length(override) > 0) {
+    args$guide <- ggplot2::guide_legend(override.aes = override)
+  } else if (!is.null(guide)) {
+    args$guide <- guide
+  }
+  scale <- do.call(scale_fun, args)
   scale$gglite_generated <- TRUE
   scale
 }
@@ -267,11 +273,29 @@ ggplot_add.gglite_layer <- function(object, plot, object_name) {
     return(plot)
   }
 
+  if (!is.null(manual$linetype)) {
+    values <- merge_manual_values(attr(plot, "gglite_manual_linetype"), manual$linetype)
+    attr(plot, "gglite_manual_linetype") <- values
+    plot <- remove_manual_scale(plot, "linetype")
+    plot$scales$add(new_manual_scale("linetype", values, guide = "none"))
+  }
+
+  linetype_values <- attr(plot, "gglite_manual_linetype")
+
   if (!is.null(manual$colour)) {
     values <- merge_manual_values(attr(plot, "gglite_manual_colour"), manual$colour)
     attr(plot, "gglite_manual_colour") <- values
+    override <- NULL
+    if (!is.null(linetype_values)) {
+      override_lty <- unname(linetype_values[names(values)])
+      if (any(is.na(override_lty))) {
+        fallback <- ggplot2::GeomPath$default_aes$linetype
+        override_lty[is.na(override_lty)] <- fallback
+      }
+      override <- list(linetype = override_lty)
+    }
     plot <- remove_manual_scale(plot, "colour")
-    plot$scales$add(new_manual_scale("colour", values))
+    plot$scales$add(new_manual_scale("colour", values, override = override))
   }
 
   if (!is.null(manual$fill)) {
@@ -279,13 +303,6 @@ ggplot_add.gglite_layer <- function(object, plot, object_name) {
     attr(plot, "gglite_manual_fill") <- values
     plot <- remove_manual_scale(plot, "fill")
     plot$scales$add(new_manual_scale("fill", values))
-  }
-
-  if (!is.null(manual$linetype)) {
-    values <- merge_manual_values(attr(plot, "gglite_manual_linetype"), manual$linetype)
-    attr(plot, "gglite_manual_linetype") <- values
-    plot <- remove_manual_scale(plot, "linetype")
-    plot$scales$add(new_manual_scale("linetype", values))
   }
 
   plot
