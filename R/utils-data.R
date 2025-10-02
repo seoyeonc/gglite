@@ -249,7 +249,7 @@ remove_manual_scale <- function(plot, aesthetic) {
   keep <- vapply(
     plot$scales$scales,
     function(scale) {
-      !(identical(scale$gglite_generated, TRUE) && aesthetic %in% scale$aesthetics)
+      !(aesthetic %in% scale$aesthetics)
     },
     logical(1)
   )
